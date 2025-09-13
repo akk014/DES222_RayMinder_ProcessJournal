@@ -1,1 +1,1 @@
-# DES222_Task2_ProcessJournal
+# Process Journal for DES222 Task 2 and 3
