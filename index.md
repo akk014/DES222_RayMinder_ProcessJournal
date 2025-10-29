@@ -71,6 +71,8 @@ Instead of or additionally to the haptic feedback, the cap could have LED stripe
 
 
 ## Development
+We started the development of the RayMinder together with developing the concrete idea and a first app design. For the actual development of the app and the hardware we split tasks for a more efficient process. As Jofel has never worked with microcontrollers, but has experience with creating websites, she is responsible for the software of our project. As I have previously worked with microcontrollers before, my focus is the hardware. For this reason, the process journal will focus more on the devolpment of the hardware components.
+
 ### Idea Development
 The first phase of development was finding the idea itself. I had the idea of a UV cap in my mind for longer, as I think it is a very useful product. As research showed that similar product already exist on the market, I thought about how that product could be used in a bigger context. In that I remembered the Totem Compass (see section Similar Projects), that I saw on TikTok. Together as a group, we worked on a possible realization of a combination of the two products.
 
@@ -89,8 +91,60 @@ After we decided what designs worked best, we created a first design draft in fi
 
 
 ### Next Steps
+// TODO: Remove this:
 Continuing with our development, we will next be trying out the hardware components. We will work out how to collect UV sensor data with an ESP32 or an Arduino, and add a haptic buzzer to it. After that we will create a base app and connect it to the microcontroller.
 
 We will also look into programming the app. For that we will first create a base app to test the connection to the microcontroller and the connection to other phones, including sharing locations. 
 
 Once the base app and the connection to the microcontroller works, we will develop all functionalities of the app and the coresponding reactions of the caps.
+// TODO: REmove till here
+
+### Test programs for the modules
+#### Buzzers
+As a first step in the development of the hardware components, I wrote test programs to figure out if and how the different components work. For the buzzers, I wrote a simple code that turns a buzzer on a set pin on and off again. 
+![](./Images/ModuleTestsBuzzer.png)
+
+#### I2C Communication
+The next "component" I tested was I2C communication. We will use I2C for the communication between the phone and the ESP32. Since I have not worked with I2C in a long time, I wrote a little program that turns the buzzer on, if a certain message was written in the Serial Monitor. This little exercise helped me understand how Serial input is handled again, and will help decode messages that are send from the phone to the microcontroller. 
+![](./Images/ModuleTestsSerial.png)
+
+#### UV Sensor
+Another main component of the RayMinder is the UV sensor. For this I first wrote a program that prints out the data that is received with an analogRead to get an impression of the data outputs.
+![](./Images/ModuleTestsUVSensor.png)
+
+With a look into the documentation of the GUVA-S12SD UV sensor, I found out that the values go from 0 to 4095 and can be converted to the uv index by dividing the voltage by it and muliplying it with 0.1. I tested the resulting calculation by going back and forth between the sun and shadow and comparing the values to the uv index declared by the weather forecast.
+// TODO: How to include these two mediums?
+<!-- ![](./Images/ModuleTestsUVSensor.mov) -->
+![](./Images/ModuleTestsUVSensorOutside.png)
+
+After this worked, I continued with the question of how we are going to calculate the time of the next needed sunscreen application. This was the most complicated part of the code development and needed a lot of trial and error. 
+
+I started with researching a possible calculation. There are six different skintypes. The different skintypes can stay in uv index 10 for 10, ~15, 20, 30, 60, and 90 minutes (https://www.ker-sun.com/en-us/blogs/suncare-advice-prevention/what-is-your-phototype, accessed 25.11.2025). The time a person can stay in the sun is proportional to the uv index (https://www.grassrootshealth.net/blog/assessing-sun-exposure-skin-type-uv-index-duration/, accessed 25.11.2025). The amount of time a person can stay in the sun with sunscreen is the time without sunscreen multiplied by the SPD (https://www.newswise.com/articles/expert-provides-sun-safety-tips-for-skin-cancer-awareness-month, accessed 25.11.2025). As sunscreen application oftentimes is not perfect and with sweat and other factors, the protection wears off over time, a factor of 0.6 provides a more realistic time till the next reapplication (https://www.barmer.de/gesundheit-verstehen/koerper/haut/lichtschutzfaktor-1268356, accessed 25.11.2025 and https://www.sciencedirect.com/science/article/pii/S0190962201584303, accessed 25.11.2025). I integrated all of these calculation in my code.
+![](./Images/ModuleTestsUVCalculation1.png)
+
+Now there was still the questions, when exactly to recalculate the time to the next application. For reapplying sunscreen, the possibilities where that the newly calculated time is added to the current next time to reapplicate or to overwrite the time completely. I went with the second solution, as if the same SPF is applied only after a few minutes, the time to the next reapplication would not just be readded, but just reset.
+
+Another time when the time has to be recalculated is when the UV index changes. In the beginning I used the constantly changing uv value and tried to calculate it with a complicated calculation with calculating the fraction of the elapsed time. This approached only worked if the the uv value changed rarely. Additionally this approach was over-complicated.
+![](./Images/ModuleTestsUVCalculation2.png)
+
+After some thinking, I found a new solution. Firstly, the UV value should not change with every newly received data. For example if the person quickly walks through the shadow of a tree, it does not make sense to recalculate the time for these few seconds. To solve this issue, I added the calculation of an average UV index.
+![](./Images/ModuleTestsUVCalculation3.png)
+
+Secondy, since the time in the sun is proportional to the UV index, I added a calculation with this, instead of the complicated fractions. I tested all of these calculations with different sunscreen reapplications and UV values. 
+![](./Images/ModuleTestsUVCalculation4.png)
+
+#### Compass
+Lastly, I tested a compass which will tell us the direction a RayMinder cap is facing to activate buzzers in the direction of a friend. For this, we have the HMC5883L. Figuring out how to get the compass working was one of the harder tasks. To figure it out, I first tried out an example from the package Grove_3Axis_Digital_Compass_HMC5883L, which sounded the closest to what we need. The internally used I2C communication did not work with this example. As this did not work, I used the second closest package, Adafruit_HMC5883_Unified. This package is not for the specific sensor that we use, but it did give me plausible results, which is why I continued working with it. The example included in the package already showed how to get the degree in which the module is heading. 
+
+With the example code, there was one problem: The direction is separated into the 3 axises, x, y, and z. With this, if the horizontal orientation was changed, the facing direction changed as well. To be able to use the compass in our project, I added that the heading degree is only saved if the compass is parallel to the ground, which is at about z=45. To make sure that the result is correct, I cross-checked it with my phone.
+![](./Images/ModuleTestsCompass.png)
+
+### Combining the Components to one Script
+Now all the components have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32.
+// TODO: Continue here
+// TODO: Write about message system
+
+
+// TODO: Add app development
+
+// TODO: Add connection of app and ESP32
