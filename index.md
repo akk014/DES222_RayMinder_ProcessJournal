@@ -139,12 +139,18 @@ Lastly, I tested a compass which will tell us the direction a RayMinder cap is f
 With the example code, there was one problem: The direction is separated into the 3 axises, x, y, and z. With this, if the horizontal orientation was changed, the facing direction changed as well. To be able to use the compass in our project, I added that the heading degree is only saved if the compass is parallel to the ground, which is at about z=45. To make sure that the result is correct, I cross-checked it with my phone.
 ![](./Images/ModuleTestsCompass.png)
 
+#### Communication with Phone via BLE
+To connect the phone with the ESP32, I used BLE. For this I first wrote code to test how the connection works. After the connection was established, I added functions to the code of the ESP32, that send messages to the phone. The messages that are send are for the current UV value (average), the time of the last application, the time to the next application, and the degree the RayMinder is facing. 
+![](./Images/ModuleTestsBLE1.png)
+
+These messages are received in the code of the app, decoded, and the fitting action is taken. The code of the app was also extended with a connect button, and messages that can be send to the ESP32 to tell it, that sunscreen was reapplied or that friends should reapply sunscreen.
+![](./Images/ModuleTestsBLE2.png)
+![](./Images/ModuleTestsBLE3.png)
+
 ### Combining the Components to one Script
-Now all the components have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32.
+Now all the components have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration.
 // TODO: Continue here
 // TODO: Write about message system
 
 
 // TODO: Add app development
-
-// TODO: Add connection of app and ESP32
