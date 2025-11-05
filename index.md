@@ -5,8 +5,22 @@ _By Annika Kristin Kaul, Student Number: 1196068_
 The RayMinder: UV Smart Caps for Friends is a group project together with Jofel Guevarra.
 
 
-# RayMinder: UV Smart Caps for Friends 
-// TODO: Add video here
+# RayMinder: UV Smart Caps for Friends
+[![](https://markdown-videos-api.jorgenkh.no/youtube/{yLs8Rbape7Q})](https://youtu.be/{yLs8Rbape7Q})
+
+
+## Index
+1. [Concept](#concept)
+    1. [Similar Projects](#similar-projects)
+    2. [Design](#design)
+2. [Development - Phase 1 (Task 2)](#development---phase-1-task-2)
+    1. [First App Design](#first-app-design)
+3. [Development - Phase 2 (Task 3)](#development---phase-2-task-3)
+    1. [Test programs for the Modules](#test-programs-for-the-modules)
+    2. [Combining the Components into one ESP32 Script](#combining-the-components-into-one-esp32-script)
+    3. [Assembling the Hardware](#assembling-the-hardware)
+4. [Result](#result)
+
 
 ## Concept
 The RayMinder: UV Smart Caps for Friends helps to prevent sunburn and reduces the risk of getting skin cancer by reminding users that they or their friends need to reapply sunscreen.
@@ -100,7 +114,9 @@ After we decided what designs worked best, we created a first design draft in fi
 ## Development - Phase 2 (Task 3)
 After we had figured out most of our design, we started with the realisation of the project. While Jofel worked on the webapplication as described above, I started working on the hardware.
 
-### Test programs for the modules
+All ESP32 programms are located in https://github.com/jofelguevarra/RayMinderApp/tree/main/ESP32Scripts. The README file explains, which of the in the following described scripts are located where in the repository. The code for the app can be found at https://github.com/jofelguevarra/RayMinder.
+
+### Test Programs for the Modules
 #### Buzzers
 As a first step in the development of the hardware components, I wrote test programs to figure out if and how the different components work. For the buzzers, I wrote a simple code that turns a buzzer on a set pin on and off again. 
 ![](./Images/ModuleTestsBuzzer.png)
@@ -114,7 +130,6 @@ Another main component of the RayMinder is the UV sensor. For this I first wrote
 ![](./Images/ModuleTestsUVSensor.png)
 
 With a look into the documentation of the GUVA-S12SD UV sensor, I found out that the values go from 0 to 4095 and can be converted to the uv index by dividing the voltage by it and muliplying it with 0.1. I tested the resulting calculation by going back and forth between the sun and shadow and comparing the values to the uv index declared by the weather forecast.
-// TODO: How to include these two mediums?
 ![](./Images/ModuleTestsUVSensor.mov)
 ![](./Images/ModuleTestsUVSensorOutside.png)
 
@@ -141,17 +156,44 @@ With the example code, there was one problem: The direction is separated into th
 ![](./Images/ModuleTestsCompass.png)
 
 #### Communication with Phone via BLE
-To connect the phone with the ESP32, I used BLE. For this I first wrote code to test how the connection works. After the connection was established, I added functions to the code of the ESP32, that send messages to the phone. The messages that are send are for the current UV value (average), the time of the last application, the time to the next application, and the degree the RayMinder is facing. 
+To connect the phone with the ESP32, I used BLE. For this I first wrote code to test how the connection works. After the connection was established, I added functions to the code of the ESP32, that send messages to the phone. The messages that are send are for the current UV value (average), the time of the last application, the time to the next application, and the degree the RayMinder is facing.
 ![](./Images/ModuleTestsBLE1.png)
 
-These messages are received in the code of the app, decoded, and the fitting action is taken. The code of the app was also extended with a connect button, and messages that can be send to the ESP32 to tell it, that sunscreen was reapplied or that friends should reapply sunscreen.
-![](./Images/ModuleTestsBLE2.png)
-![](./Images/ModuleTestsBLE3.png)
-
-### Combining the Components to one Script
-Now all the components have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration.
-// TODO: Continue here
-// TODO: Write about message system
+These messages are received in the code of the app. Jofel had already created a Dotnet app with screens for registering, login, the "You"-page, as well as a "Friends"-page. To successfully connect the phone with the ESP32, I extended the code. I added a button to the page, with which users can connect the ESP32 to the app. The following image shows the code, that is used for the connection.
+![](./Images/BLEApp.png)
+![](./Images/ScreenshotAppBLE.png)
 
 
-// TODO: Add app development
+In general, for the messages, I created a coded messaging system, with which all messages are send in form of digits and decoded correspondingly. For example, to set the UV value to 3, the ESP32 sends the message "003" to the app. The leading digit, 0, stands for set UV value, the other digits for the UV value. 
+
+I also added functions to the app, with which the app send messages to the phone, and messages can be received, decoded, and the fitting action is taken. The code of the app was also extended with a connect button, and messages that can be send to the ESP32 to tell it, that sunscreen was reapplied or that friends should reapply sunscreen.
+![](./Images/ModuleTestBLE2.png)
+![](./Images/ModuleTestBLE3.png)
+
+### Combining the Components into one ESP32 Script
+Now all the components for the ESP32 have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration. For easier testing, I used the Serial Monitor to simulate sending messages between the ESP32 and the app. Once all tests succeeded, I also tested the functionalities with the real app.
+
+### Assembling the Hardware
+So far, all the hardware was tested on a breadboard. Now it is time to actually assemble it. For that I soldered all cables to the ESP32 and the modules. This was an extensive task, with multiple cables breaking of that had to be re-soldered onto the construction.
+![](./Images/HW1.png)
+
+One of the most frustrating issues I faced, was that I had to swap ESP32s two times, because I thought they were fried. In the end, the issue was probably that I was not able to use multiple pins of the ESP32 with the buzzers, as they are used in the startup process of the ESP32. Using these pins lead to the scripts sometimes not uploading to the ESP32, even though it looked like it worked in the Arduino IDE. Since the IDE did not show any issues, figuring out, that that was the reason, why my code did not run correctly was hard. In the end, it worked with using different pins for the buzzers and only attaching the UV sensor to the "forbidden" pins.
+
+At the end of the soldering process, we were left with a lot of cables that had to fit in the seam of the cap.
+![](./Images/HW2.png)
+
+With two hands, tape, clamps, and neadle and thread, we managed to put the cables into the seam as we were hoping.
+![](./Images/HW3.png)
+![](./Images/HW4.png)
+
+
+## Result
+![](./Images/CapOutside.png)
+![](./Images/CapInside.png)
+![](./Images/ScreenshotApp.png)
+
+In the end of our development, we now have a working RayMinder. The RayMinder can successfully collect UV data and calculate the next time that the user has to reapply sunscreen. For that, a delibarate calculation was used that is used at the start of a connection to an ESP, once the reapply-button was clicked, and once the UV value changes. The ESP32 and the connected phone communicate via BLE. For this reason, to use the app, an additional app like nRF Connect has to be installed to connect the ESP32 to the phone, and the Browser Bluefy has to be used on an iPhone. 
+
+The ESP and the app both already feature functionality that it possible that when a user's friend needs to reapply sunscreen, a buzzer in the direction goes off. As we only created one RayMinder prototype, this functionality was not tested yet.
+
+In general, we are proud of the result. We managed to create a working prototype that looks professional. As the RayMinder is a very useful wearable, that combines individual safety and a social component, this might be a project that I will continue to work on in the future.
