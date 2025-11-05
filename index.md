@@ -1,4 +1,4 @@
-**DES222 Task 2 - Process Journal**
+**DES222 Task 3 - Process Journal**
 
 _By Annika Kristin Kaul, Student Number: 1196068_
 
@@ -6,6 +6,8 @@ The RayMinder: UV Smart Caps for Friends is a group project together with Jofel 
 
 
 # RayMinder: UV Smart Caps for Friends 
+// TODO: Add video here
+
 ## Concept
 The RayMinder: UV Smart Caps for Friends helps to prevent sunburn and reduces the risk of getting skin cancer by reminding users that they or their friends need to reapply sunscreen.
 
@@ -37,7 +39,7 @@ Source: https://www.totemlabs.com (Accessed: 03.09.2025)
 
 ### Design
 #### General Design
-The RayMinder caps are a combination of a wearable in form of a physical cap with a UV sensor and haptic buzzers, and an app connected to it. The RayMinder caps are each made out of the following materials: 1 cap, 1 ESP32 or Arduino, 1 UV sensor, 4 haptic buzzers, 1 battery pack and cables. Additionally a phone is needed.
+The RayMinder caps are a combination of a wearable in form of a physical cap with a UV sensor and haptic buzzers, and an app connected to it. The RayMinder caps are each made out of the following materials: 1 cap, 1 ESP32-C3 Zero, 1 UV sensor, 1 Compass, 4 haptic buzzers, 1 battery pack and cables. All components but the UV sensor and the compass are hidden inside the cap. The UV sensor and compass are located on top of the cap for a most accurate data generation. Additionally a phone is needed.
 ![](./Images/RayMinder.png)
 
 Each cap is connected to an app. The app design is the following:
@@ -69,9 +71,14 @@ Instead of or additionally to the haptic feedback, the cap could have LED stripe
 
 <ins>Con:</ins> Has to be bright enough for it to be usefull in daylight. Too much light in vision can be anoying.
 
+##### Positioning of the Hardware Components
+In the design phase, we thought that we have to place all of the components on the outside of the cap, since it would not be possible to attach them inside the cap, without them looking terrible, feeling irritating or even falling off. We were able to change the plan, when we saw that the cap we bought has a wide seam inside, in which we can hide most of the modules. With this, the RayMinder caps look way more professional from the outside. The only parts, that still had to be placed outside of the cap, were the UV sensor and the compass to retreive reliable data. 
 
-## Development
-We started the development of the RayMinder together with developing the concrete idea and a first app design. For the actual development of the app and the hardware we split tasks for a more efficient process. As Jofel has never worked with microcontrollers, but has experience with creating websites, she is responsible for the software of our project. As I have previously worked with microcontrollers before, my focus is the hardware. For this reason, the process journal will focus more on the devolpment of the hardware components.
+For the possition inside the cap's seam, we
+
+
+## Development - Phase 1 (Task 2)
+We started the development of the RayMinder together with developing the concrete idea and a first app design. For the actual development of the app and the hardware we split tasks for a more efficient process. As Jofel has never worked with microcontrollers, but has experience with creating websites, she is responsible for most of the software of our project. As I have previously worked with microcontrollers before, my focus is the hardware. For this reason, the process journal will focus more on the devolpment of the hardware components and the connection to it.
 
 ### Idea Development
 The first phase of development was finding the idea itself. I had the idea of a UV cap in my mind for longer, as I think it is a very useful product. As research showed that similar product already exist on the market, I thought about how that product could be used in a bigger context. In that I remembered the Totem Compass (see section Similar Projects), that I saw on TikTok. Together as a group, we worked on a possible realization of a combination of the two products.
@@ -80,7 +87,7 @@ The first phase of development was finding the idea itself. I had the idea of a 
 Once the idea was ready, we started working on a first design of the app. We thought about what the app should show and which buttons with functionality it should include. We drew a few sketches on paper. 
 ![Sketch of App on Paper](./Images/AppPaperSketch.png)
 
-We though about how to create groups. The solution that seemed best fitting for us, is to register users with their email. Users also have to add their skin type when registering. This is needed for the recalculation of when to apply sunscreen. We thought about putting that option near the reapply-button, but since this attribute doesn't change it is better suited in the register process.
+We though about how to create groups. The solution that seemed best fitting for us, is to register users with their email. Users also have to add their skin type when registering. This is needed for the recalculation of when to apply sunscreen. We thought about putting that option near the reapply-button, but since this attribute doesn't change it is better suited in the register process. For more simplicity we ended up using usernames and an SPF and skintype dropdown on the page of the reapply button.
 
 The idea of having two main pages in the app, one for the user themselves and one for friends, came to our minds instantly as these are the main interactions with the RayMinder caps. For how to navigate between the two pages, we first thought about a hamburger menu to change the pages. We settled on a tab layout as users can switch between tabs faster than if they have to open a menu first. The app also doen't include too many informations on one page, so the constant inclusion of the tabs doesn't make it too crowded.
 
@@ -90,14 +97,8 @@ After we decided what designs worked best, we created a first design draft in fi
 ![First App Design in Figma](./Images/AppFirstDesign.png)
 
 
-### Next Steps
-// TODO: Remove this:
-Continuing with our development, we will next be trying out the hardware components. We will work out how to collect UV sensor data with an ESP32 or an Arduino, and add a haptic buzzer to it. After that we will create a base app and connect it to the microcontroller.
-
-We will also look into programming the app. For that we will first create a base app to test the connection to the microcontroller and the connection to other phones, including sharing locations. 
-
-Once the base app and the connection to the microcontroller works, we will develop all functionalities of the app and the coresponding reactions of the caps.
-// TODO: REmove till here
+## Development - Phase 2 (Task 3)
+After we had figured out most of our design, we started with the realisation of the project. While Jofel worked on the webapplication as described above, I started working on the hardware.
 
 ### Test programs for the modules
 #### Buzzers
@@ -105,7 +106,7 @@ As a first step in the development of the hardware components, I wrote test prog
 ![](./Images/ModuleTestsBuzzer.png)
 
 #### I2C Communication
-The next "component" I tested was I2C communication. We will use I2C for the communication between the phone and the ESP32. Since I have not worked with I2C in a long time, I wrote a little program that turns the buzzer on, if a certain message was written in the Serial Monitor. This little exercise helped me understand how Serial input is handled again, and will help decode messages that are send from the phone to the microcontroller. 
+The next "component" I tested was I2C communication. This will later be used for communication with a compass, but it was also very helpful for testing sending messages. Since I have not worked with I2C in a long time, I wrote a little program that turns the buzzer on, if a certain message was written in the Serial Monitor. This little exercise helped me understand how Serial input is handled again, and will help decode messages that are send from the phone to the microcontroller. 
 ![](./Images/ModuleTestsSerial.png)
 
 #### UV Sensor
@@ -114,7 +115,7 @@ Another main component of the RayMinder is the UV sensor. For this I first wrote
 
 With a look into the documentation of the GUVA-S12SD UV sensor, I found out that the values go from 0 to 4095 and can be converted to the uv index by dividing the voltage by it and muliplying it with 0.1. I tested the resulting calculation by going back and forth between the sun and shadow and comparing the values to the uv index declared by the weather forecast.
 // TODO: How to include these two mediums?
-<!-- ![](./Images/ModuleTestsUVSensor.mov) -->
+![](./Images/ModuleTestsUVSensor.mov)
 ![](./Images/ModuleTestsUVSensorOutside.png)
 
 After this worked, I continued with the question of how we are going to calculate the time of the next needed sunscreen application. This was the most complicated part of the code development and needed a lot of trial and error. 
