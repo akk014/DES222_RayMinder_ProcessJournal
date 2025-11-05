@@ -9,7 +9,7 @@ The RayMinder: UV Smart Caps for Friends is a group project together with Jofel 
 [![](https://markdown-videos-api.jorgenkh.no/youtube/{yLs8Rbape7Q})](https://youtu.be/{yLs8Rbape7Q})
 
 
-## Index
+## Contents
 1. [Concept](#concept)
     1. [Similar Projects](#similar-projects)
     2. [Design](#design)
