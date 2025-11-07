@@ -37,22 +37,22 @@ With the reaction of the caps to the collected and processed UV sensor data, it 
 #### Sunscreen Reminder Hat
 The Sunscreen Reminder Hat is a hat with a UV sensor, connected to a Flora microcontroller that reminds users to apply sunscreen by playing a song. The project can be useful as a starting point, as we also use a UV sensor on a hat that processes data via a microcontroller.
 ![A woman wearing a Sunscreen Reminder Hat](./Images/SunscreenReminderHat.jpg)
-Source: https://learn.adafruit.com/sunscreen-reminder-hat/overview (Accessed: 01.09.2025)
+Source: [https://learn.adafruit.com/sunscreen-reminder-hat/overview](https://learn.adafruit.com/sunscreen-reminder-hat/overview) (Accessed: 01.09.2025)
 
 #### QSun
 QSun is a wearable that helps users track the UV index that they are exposed to with an app and sends alerts if they stay in the sun for too long. As our project uses an app for more insights in the UV exposure and other features, the QSun app is an inspiration for the realisation for it. QSun does include many more features like a Vitamin D tracker, that our project will not include.
 ![A phone with the QSun app opened next to a QSun Tracker ](./Images/QSun.jpg)
-Source: https://www.kickstarter.com/projects/comfable/qsun (Accessed: 03.09.2025)
+Source: [https://www.kickstarter.com/projects/comfable/qsun](https://www.kickstarter.com/projects/comfable/qsun) (Accessed: 03.09.2025)
 
 #### Sunfriend
 Sunfriend is another project we use as inspiration. The Sunfriend wristbands are wearables that track the users UV index and indicate the time a user should reapply sunscreen. The wristbands design is simple and tells the user the necesarry information in an efficient way. The simplistic design can be used in the design of the RayMinder caps, as the user should be able to identify the most important information - if they or a friend need to reapply sunscreen and the location of their friends - efficiently. 
 ![Two Sunfriends](./Images/Sunfriend.webp)
-Source: https://newatlas.com/sunfriend-uv-wristband/29979/ (Accessed: 03.09.2025)
+Source: [https://newatlas.com/sunfriend-uv-wristband/29979/](https://newatlas.com/sunfriend-uv-wristband/29979/) (Accessed: 03.09.2025)
 
 #### Totem Compass
 For the friend locating function, the Totem Compass is an inspiration. The Totem Compass is worn like a necklace and indicates where friends are located with colors pointing to them. The Totem Compass was invented specifically for festivals where friend groups get split up and have difficulties finding each other again. A similar concept applies for the RayMinder caps. They are made for groups in situations where they don't constantly look at their phones - like music festivals. The color location indication of the Totem Compass will be integrated in the RayMinder app in form an indication in the friend's direction. On the cap itself, the location will be indicated by haptic buzzers that go off in the friend's direction if a friend needs to be reminded to reapply sunscreen.
 ![Totem Compass](./Images/TotemCompass.png)
-Source: https://www.totemlabs.com (Accessed: 03.09.2025)
+Source: [https://www.totemlabs.com](https://www.totemlabs.com) (Accessed: 03.09.2025)
 
 
 ### Design
@@ -118,7 +118,7 @@ After we decided what designs worked best, we created a first design draft in fi
 ## Development - Phase 2 (Task 3)
 After we had figured out most of our design, we started with the realisation of the project. While Jofel worked on the webapplication as described above, I started working on the hardware.
 
-All ESP32 programms are located in https://github.com/jofelguevarra/RayMinderApp/tree/main/ESP32Scripts. The README file explains, which of the in the following described scripts are located where in the repository. The code for the app can be found at https://github.com/jofelguevarra/RayMinder.
+All ESP32 programms are located in [https://github.com/jofelguevarra/RayMinderApp/tree/main/ESP32Scripts](https://github.com/jofelguevarra/RayMinderApp/tree/main/ESP32Scripts). The README file explains, which of the in the following described scripts are located where in the repository. The code for the app can be found at [https://github.com/jofelguevarra/RayMinder](https://github.com/jofelguevarra/RayMinder).
 
 ### Test Programs for the Modules
 #### Buzzers
@@ -139,7 +139,7 @@ With a look into the documentation of the GUVA-S12SD UV sensor, I found out that
 
 After this worked, I continued with the question of how we are going to calculate the time of the next needed sunscreen application. This was the most complicated part of the code development and needed a lot of trial and error. 
 
-I started with researching a possible calculation. There are six different skintypes. The different skintypes can stay in uv index 10 for 10, ~15, 20, 30, 60, and 90 minutes (https://www.ker-sun.com/en-us/blogs/suncare-advice-prevention/what-is-your-phototype, accessed 25.11.2025). The time a person can stay in the sun is proportional to the uv index (https://www.grassrootshealth.net/blog/assessing-sun-exposure-skin-type-uv-index-duration/, accessed 25.11.2025). The amount of time a person can stay in the sun with sunscreen is the time without sunscreen multiplied by the SPD (https://www.newswise.com/articles/expert-provides-sun-safety-tips-for-skin-cancer-awareness-month, accessed 25.11.2025). As sunscreen application oftentimes is not perfect and with sweat and other factors, the protection wears off over time, a factor of 0.6 provides a more realistic time till the next reapplication (https://www.barmer.de/gesundheit-verstehen/koerper/haut/lichtschutzfaktor-1268356, accessed 25.11.2025 and https://www.sciencedirect.com/science/article/pii/S0190962201584303, accessed 25.11.2025). I integrated all of these calculation in my code.
+I started with researching a possible calculation. There are six different skintypes. The different skintypes can stay in uv index 10 for 10, ~15, 20, 30, 60, and 90 minutes ([https://www.ker-sun.com/en-us/blogs/suncare-advice-prevention/what-is-your-phototype](https://www.ker-sun.com/en-us/blogs/suncare-advice-prevention/what-is-your-phototype), accessed 25.11.2025). The time a person can stay in the sun is proportional to the uv index ([https://www.grassrootshealth.net/blog/assessing-sun-exposure-skin-type-uv-index-duration/](https://www.grassrootshealth.net/blog/assessing-sun-exposure-skin-type-uv-index-duration/), accessed 25.11.2025). The amount of time a person can stay in the sun with sunscreen is the time without sunscreen multiplied by the SPD ([https://www.newswise.com/articles/expert-provides-sun-safety-tips-for-skin-cancer-awareness-month](https://www.newswise.com/articles/expert-provides-sun-safety-tips-for-skin-cancer-awareness-month), accessed 25.11.2025). As sunscreen application oftentimes is not perfect and with sweat and other factors, the protection wears off over time, a factor of 0.6 provides a more realistic time till the next reapplication ([https://www.barmer.de/gesundheit-verstehen/koerper/haut/lichtschutzfaktor-1268356, accessed 25.11.2025 and https://www.sciencedirect.com/science/article/pii/S0190962201584303](https://www.barmer.de/gesundheit-verstehen/koerper/haut/lichtschutzfaktor-1268356, accessed 25.11.2025 and [https://www.sciencedirect.com/science/article/pii/S0190962201584303](https://www.sciencedirect.com/science/article/pii/S0190962201584303)), accessed 25.11.2025). I integrated all of these calculation in my code.
 ![](./Images/ModuleTestsUVCalculation1.png)
 
 Now there was still the questions, when exactly to recalculate the time to the next application. For reapplying sunscreen, the possibilities where that the newly calculated time is added to the current next time to reapplicate or to overwrite the time completely. I went with the second solution, as if the same SPF is applied only after a few minutes, the time to the next reapplication would not just be readded, but just reset.
@@ -174,7 +174,7 @@ I also added functions to the app, with which the app send messages to the phone
 ![](./Images/ModuleTestBLE3.png)
 
 ### Combining the Components into one ESP32 Script
-Now all the components for the ESP32 have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration. For easier testing, I used the Serial Monitor to simulate sending messages between the ESP32 and the app. Once all tests succeeded, I also tested the functionalities with the real app. As mentioned before, the script can be found at https://github.com/jofelguevarra/RayMinderApp/blob/main/ESP32Scripts/RayMinder/RayMinder.ino.
+Now all the components for the ESP32 have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration. For easier testing, I used the Serial Monitor to simulate sending messages between the ESP32 and the app. Once all tests succeeded, I also tested the functionalities with the real app. As mentioned before, the script can be found at [https://github.com/jofelguevarra/RayMinderApp/blob/main/ESP32Scripts/RayMinder/RayMinder.ino](https://github.com/jofelguevarra/RayMinderApp/blob/main/ESP32Scripts/RayMinder/RayMinder.ino).
 
 ### Assembling the Hardware
 So far, all the hardware was tested on a breadboard. Now it is time to actually assemble it. For that I soldered all cables to the ESP32 and the modules. This was an extensive task, with multiple cables breaking of that had to be re-soldered onto the construction.
@@ -195,7 +195,7 @@ With two hands, tape, clamps, and neadle and thread, we still managed to put the
 ![](./Images/CapInside.png)
 ![](./Images/ScreenshotApp.png)
 
-In the end of our development, we now have a working RayMinder. The RayMinder can successfully collect UV data and calculate the next time that the user has to reapply sunscreen. For that, a delibarate calculation was used that is ran at the start of a connection to an ESP, once the reapply-button is clicked, and once the UV value changes. The ESP32 and the connected phone communicate via BLE. For this reason, to use the app, an additional app like nRF Connect has to be installed to connect the ESP32 to the phone, and the Browser Bluefy has to be used on an iPhone. The app is a Dotnet webapplication that can be found here: https://rayminder.onrender.com. Once the time till the next reapplication has run out, the user gets reminded to reapply sunscreen with all four buzzers going off in the RayMinder cap.
+In the end of our development, we now have a working RayMinder. The RayMinder can successfully collect UV data and calculate the next time that the user has to reapply sunscreen. For that, a delibarate calculation was used that is ran at the start of a connection to an ESP, once the reapply-button is clicked, and once the UV value changes. The ESP32 and the connected phone communicate via BLE. For this reason, to use the app, an additional app like nRF Connect has to be installed to connect the ESP32 to the phone, and the Browser Bluefy has to be used on an iPhone. The app is a Dotnet webapplication that can be found here: [https://rayminder.onrender.com](https://rayminder.onrender.com). Once the time till the next reapplication has run out, the user gets reminded to reapply sunscreen with all four buzzers going off in the RayMinder cap.
 
 The ESP and the app both already feature functionality that make it possible that when a user's friend needs to reapply sunscreen, a buzzer in the direction goes off. As we only created one RayMinder prototype, this functionality was not tested yet.
 
