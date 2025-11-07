@@ -13,7 +13,6 @@ The RayMinder: UV Smart Caps for Friends is a group project together with Jofel 
 </iframe>
 
 
-
 ## Contents
 1. [Concept](#concept)
     1. [Similar Projects](#similar-projects)
@@ -93,7 +92,7 @@ Instead of or additionally to the haptic feedback, the cap could have LED stripe
 ##### Positioning of the Hardware Components
 In the design phase, we thought that we have to place all of the components on the outside of the cap, since it would not be possible to attach them inside the cap, without them looking terrible, feeling irritating or even falling off. We were able to change the plan, when we saw that the cap we bought has a wide seam inside, in which we can hide most of the modules. With this, the RayMinder caps look way more professional from the outside. The only parts, that still had to be placed outside of the cap, were the UV sensor and the compass to retreive reliable data. 
 
-For the possition inside the cap's seam, we
+For the exact position of the components in the seam and around the cap, we tried out multiple variants. First we wanted to place the buzzers in the front, back, and the two sides. With there being no seam in the back of the cap, we instead put the buzzers in the diagonals. For the positioning of the ESP32 and the battery pack, we first thought that it would be best to put them on one side to have less long cables. But as this would make the weight of the cap one-sided, we instead put the battery to the opposite side of the cap. The last position, that changed from the first idea, is the position of the compass. We wanted to place it directly below the UV sensor on top of the cap. When we assembled the actual hardware, we realized that this would look rediculous, as the two modules would stand up too far in a very visible position of the cap. So we had to find a new place for the compass, where it can be positioned parallel to the ground. For the later reason, we used the back of the cap. To be able to still adjust the size of the cap, the compass is placed in the valcro.
 
 
 ## Development - Phase 1 (Task 2)
@@ -168,7 +167,6 @@ These messages are received in the code of the app. Jofel had already created a 
 ![](./Images/BLEApp.png)
 ![](./Images/ScreenshotAppBLE.png)
 
-
 In general, for the messages, I created a coded messaging system, with which all messages are send in form of digits and decoded correspondingly. For example, to set the UV value to 3, the ESP32 sends the message "003" to the app. The leading digit, 0, stands for set UV value, the other digits for the UV value. 
 
 I also added functions to the app, with which the app send messages to the phone, and messages can be received, decoded, and the fitting action is taken. The code of the app was also extended with a connect button, and messages that can be send to the ESP32 to tell it, that sunscreen was reapplied or that friends should reapply sunscreen.
@@ -176,7 +174,7 @@ I also added functions to the app, with which the app send messages to the phone
 ![](./Images/ModuleTestBLE3.png)
 
 ### Combining the Components into one ESP32 Script
-Now all the components for the ESP32 have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration. For easier testing, I used the Serial Monitor to simulate sending messages between the ESP32 and the app. Once all tests succeeded, I also tested the functionalities with the real app.
+Now all the components for the ESP32 have been tested and developed. The next step is to combine them into one script which will be uploaded to the ESP32. For this, I integrated each component one at a time and tested each integration. For easier testing, I used the Serial Monitor to simulate sending messages between the ESP32 and the app. Once all tests succeeded, I also tested the functionalities with the real app. As mentioned before, the script can be found at https://github.com/jofelguevarra/RayMinderApp/blob/main/ESP32Scripts/RayMinder/RayMinder.ino.
 
 ### Assembling the Hardware
 So far, all the hardware was tested on a breadboard. Now it is time to actually assemble it. For that I soldered all cables to the ESP32 and the modules. This was an extensive task, with multiple cables breaking of that had to be re-soldered onto the construction.
@@ -184,10 +182,10 @@ So far, all the hardware was tested on a breadboard. Now it is time to actually 
 
 One of the most frustrating issues I faced, was that I had to swap ESP32s two times, because I thought they were fried. In the end, the issue was probably that I was not able to use multiple pins of the ESP32 with the buzzers, as they are used in the startup process of the ESP32. Using these pins lead to the scripts sometimes not uploading to the ESP32, even though it looked like it worked in the Arduino IDE. Since the IDE did not show any issues, figuring out, that that was the reason, why my code did not run correctly was hard. In the end, it worked with using different pins for the buzzers and only attaching the UV sensor to the "forbidden" pins.
 
-At the end of the soldering process, we were left with a lot of cables that had to fit in the seam of the cap.
+At the end of the soldering process, we were left with a lot of cables that had to fit in the seam of the cap. To make sure we could still move cables somewhere else, and in case a solder joint broke off, I made all cables a few centimeters longer than needed. If I had to do the assembling again, I would use a maximum one extra centimeter. In my experience with this prototype, that amount was enough for needed fixes. The long cables made it hard to push them inside the seam.
 ![](./Images/HW2.png)
 
-With two hands, tape, clamps, and neadle and thread, we managed to put the cables into the seam as we were hoping.
+With two hands, tape, clamps, and neadle and thread, we still managed to put the cables into the seam as we were hoping. In the end, only the cables for the UV sensor and the compass were visible from the outside, which was inevidible. With all other cables hidden in the seam, the added electronics on the cap of the RayMinder are not very noticable - which was our goal.
 ![](./Images/HW3.png)
 ![](./Images/HW4.png)
 
@@ -197,8 +195,8 @@ With two hands, tape, clamps, and neadle and thread, we managed to put the cable
 ![](./Images/CapInside.png)
 ![](./Images/ScreenshotApp.png)
 
-In the end of our development, we now have a working RayMinder. The RayMinder can successfully collect UV data and calculate the next time that the user has to reapply sunscreen. For that, a delibarate calculation was used that is used at the start of a connection to an ESP, once the reapply-button was clicked, and once the UV value changes. The ESP32 and the connected phone communicate via BLE. For this reason, to use the app, an additional app like nRF Connect has to be installed to connect the ESP32 to the phone, and the Browser Bluefy has to be used on an iPhone. 
+In the end of our development, we now have a working RayMinder. The RayMinder can successfully collect UV data and calculate the next time that the user has to reapply sunscreen. For that, a delibarate calculation was used that is ran at the start of a connection to an ESP, once the reapply-button is clicked, and once the UV value changes. The ESP32 and the connected phone communicate via BLE. For this reason, to use the app, an additional app like nRF Connect has to be installed to connect the ESP32 to the phone, and the Browser Bluefy has to be used on an iPhone. The app is a Dotnet webapplication that can be found here: https://rayminder.onrender.com. Once the time till the next reapplication has run out, the user gets reminded to reapply sunscreen with all four buzzers going off in the RayMinder cap.
 
-The ESP and the app both already feature functionality that it possible that when a user's friend needs to reapply sunscreen, a buzzer in the direction goes off. As we only created one RayMinder prototype, this functionality was not tested yet.
+The ESP and the app both already feature functionality that make it possible that when a user's friend needs to reapply sunscreen, a buzzer in the direction goes off. As we only created one RayMinder prototype, this functionality was not tested yet.
 
 In general, we are proud of the result. We managed to create a working prototype that looks professional. As the RayMinder is a very useful wearable, that combines individual safety and a social component, this might be a project that I will continue to work on in the future.
